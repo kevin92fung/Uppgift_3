@@ -55,7 +55,7 @@ Genom att följa dessa steg noggrant säkerställer du att din miljö är korrek
 1. Gå till [Docker Hub](https://hub.docker.com/).
 2. Logga in på ditt konto.
 3. Gå till "Account Settings".
-4. Generera en access token och kopiera den.
+4. Generera en **read, write, delete** access token och kopiera den.
 
 ### Steg 4: Lägg till Docker Token som Secret i GitHub
 1. Gå till ditt repository på GitHub.
