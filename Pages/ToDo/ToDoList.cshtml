@@ -1,0 +1,122 @@
+@page
+@model ToDoApp.Pages.ToDo.ToDoListModel
+
+@{
+    ViewData["Title"] = "ToDo List";
+}
+
+<h1 class="text-center">@ViewData["Title"]</h1>
+
+<!-- Show this form if a ToDo item is selected for editing -->
+@if (Model.EditingItem != null)
+{
+    <div class="row justify-content-center mt-3">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Edit ToDo Item</h5>
+                    <form method="post" asp-page-handler="Update">
+                        <input type="hidden" name="editingId" value="@Model.EditingItem.Id" />
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Title:</label>
+                            <input type="text" class="form-control" name="title" id="title" value="@Model.EditingItem.Title"/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="details" class="form-label">Details:</label>
+                            <textarea class="form-control" name="details" id="details">@Model.EditingItem.Details</textarea>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" name="iscompleted" id="iscompleted" value="true" @(Model.EditingItem.IsCompleted ? "checked" : "") />
+                            <label class="form-check-label" for="isCompleted">Is Completed</label>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Update ToDo Item</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<hr class="my-5">
+
+<!-- This form is used to create a new ToDo item -->
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Add ToDo Item</h5>
+                <form method="post">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title:</label>
+                        <input type="text" class="form-control" name="title" id="title" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="details" class="form-label">Details:</label>
+                        <textarea class="form-control" name="details" id="details"></textarea>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Add ToDo Item</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr class="my-5">
+
+
+<!-- Table showing a list of ToDo items -->
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Details</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.ToDoItems != null)
+                {
+                    @foreach (var item in Model.ToDoItems)
+                    {
+                        <tr>
+                            <td>@item.Title</td>
+                            <td>@item.Details</td>
+                            <td>@(item.IsCompleted ? "Completed" : "Not Completed")</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <form method="post" asp-page-handler="Edit">
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                        <button type="submit" class="btn btn-secondary"><i class="fas fa-edit"></i> Edit</button>
+                                    </form>
+                                    <form method="post" asp-page-handler="ToggleStatus">
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                        <button type="submit" class="btn btn-secondary"><i class="fas fa-check"></i> Toggle Status</button>
+                                    </form>
+                                    <form method="post" asp-page-handler="Delete">
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                        <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<!-- Bootstrap and Font Awesome CDN links -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-8Sv5B5U6efO+ulZzePf8g+z9XCr1Q2IqAnY/GfZ0xroDg/JeeBL+7lFBGzHRnDMmV9XzBm03nGJHn+az8iqVg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.4/css/bootstrap.min.css" integrity="sha512-Lvzj+BLf1xJ7sFcKPmQ2V7sX+ts6zeZU6dZU2ihvYz0DEUxnfJTrOeUV04J/sOgh9xtc0j+RlE5p0YzGwxsJcA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.4/js/bootstrap.bundle.min.js" integrity="sha512-+dkvF/FdJ/hA7YY7p8ldf30PS+7sJglhrCkV7sXcWj+V7mE/wyl6jZUzg56U6o2YIeSyHYTaIyG9n9J6MyvLlA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+

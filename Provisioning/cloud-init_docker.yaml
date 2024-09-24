@@ -1,0 +1,51 @@
+#cloud-config
+
+runcmd:
+  # Add Docker's official GPG key
+  - apt-get update -y
+  - apt-get install ca-certificates curl -y
+  - install -m 0755 -d /etc/apt/keyrings
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+  - chmod a+r /etc/apt/keyrings/docker.asc
+
+  # Add the repository to Apt sources
+  - echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo \"$VERSION_CODENAME\") stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+  # Install Docker
+  - apt-get update -y
+  - apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+
+  # Install Docker Compose manually
+  - curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  - chmod +x /usr/local/bin/docker-compose
+
+  # Create the docker-compose.yml file in the home directory
+  - |
+    cat <<EOF > /home/azureuser/docker-compose.yml
+    services:
+      app:
+        image: kevin92fung/todoapp:latest
+        restart: always
+        ports:
+          - "8080:8080"
+        environment:
+          - MongoDbSettings__ConnectionString=<Connection-String to Cosmos DB>
+          - TODO_SERVICE_IMPLEMENTATION=MongoDb
+          - ASPNETCORE_ENVIRONMENT=Development
+
+      mongo-express:
+        image: mongo-express
+        restart: always
+        ports:
+          - "8081:8081"
+        environment:
+          - ME_CONFIG_MONGODB_SERVER=<CosmosDBName>.mongo.cosmos.azure.com
+          - ME_CONFIG_MONGODB_PORT=10255
+          - ME_CONFIG_MONGODB_ADMINUSERNAME=<CosmosDB_Username>
+          - ME_CONFIG_MONGODB_ADMINPASSWORD=<CosmosDB_Password>
+          - ME_CONFIG_MONGODB_SSL=true
+    EOF
+  - docker-compose -f /home/azureuser/docker-compose.yml up -d
+
+  # Remove the docker-compose.yml file after execution
+  - rm /home/azureuser/docker-compose.yml

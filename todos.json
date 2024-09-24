@@ -1,0 +1,8 @@
+[
+  {
+    "Id": "5d4ddf6d-15cd-4aae-ae5d-295c087691bf",
+    "Title": "This is JSON",
+    "IsCompleted": false,
+    "Details": "This is saved in a json file"
+  }
+]
