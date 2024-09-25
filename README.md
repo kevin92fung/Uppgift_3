@@ -187,26 +187,14 @@ Genom att följa dessa steg noggrant säkerställer du att din miljö är korrek
        cat <<EOF > /home/azureuser/docker-compose.yml
        services:
          app:
-           image: <Nytt_Docker_Image> # Byt ut mot din nya Docker-bild
+           image: <Byt ut mot din Docker-image>
            restart: always
            ports:
              - "8080:8080"
            environment:
-             - MongoDbSettings__ConnectionString=<Connection-String to Cosmos DB> # Lägg till din CosmosDB-anslutningssträng här
+             - MongoDbSettings__ConnectionString=<Byt ut mot din connectio-string>
              - TODO_SERVICE_IMPLEMENTATION=MongoDb
              - ASPNETCORE_ENVIRONMENT=Development
-
-         mongo-express:
-           image: mongo-express
-           restart: always
-           ports:
-             - "8081:8081"
-           environment:
-             - ME_CONFIG_MONGODB_SERVER=<CosmosDBName>.mongo.cosmos.azure.com # Uppdatera med ditt CosmosDB-namn
-             - ME_CONFIG_MONGODB_PORT=10255
-             - ME_CONFIG_MONGODB_ADMINUSERNAME=<CosmosDB_Username> # Uppdatera med ditt användarnamn
-             - ME_CONFIG_MONGODB_ADMINPASSWORD=<CosmosDB_Password> # Uppdatera med ditt lösenord
-             - ME_CONFIG_MONGODB_SSL=true
        EOF
      ...
    ```

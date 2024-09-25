@@ -29,21 +29,10 @@ runcmd:
         ports:
           - "8080:8080"
         environment:
-          - MongoDbSettings__ConnectionString=<Connection-String to Cosmos DB>
+          - MongoDbSettings__ConnectionString=<CosmosDB_Connection-string>
           - TODO_SERVICE_IMPLEMENTATION=MongoDb
           - ASPNETCORE_ENVIRONMENT=Development
 
-      mongo-express:
-        image: mongo-express
-        restart: always
-        ports:
-          - "8081:8081"
-        environment:
-          - ME_CONFIG_MONGODB_SERVER=<CosmosDBName>.mongo.cosmos.azure.com
-          - ME_CONFIG_MONGODB_PORT=10255
-          - ME_CONFIG_MONGODB_ADMINUSERNAME=<CosmosDB_Username>
-          - ME_CONFIG_MONGODB_ADMINPASSWORD=<CosmosDB_Password>
-          - ME_CONFIG_MONGODB_SSL=true
     EOF
   - docker-compose -f /home/azureuser/docker-compose.yml up -d
 
